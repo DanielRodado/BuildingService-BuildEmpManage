@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS buildings (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    building_name VARCHAR(5) UNIQUE NOT NULL,
+    capacity SMALLINT NOT NULL
+);
