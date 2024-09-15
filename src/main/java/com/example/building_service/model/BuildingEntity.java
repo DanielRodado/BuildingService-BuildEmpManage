@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
@@ -20,6 +21,7 @@ public class BuildingEntity {
 
     private String buildingName;
 
+    @Column("status")
     private BuildingStatus buildingStatus;
 
     private int capacity, availableCapacity;
