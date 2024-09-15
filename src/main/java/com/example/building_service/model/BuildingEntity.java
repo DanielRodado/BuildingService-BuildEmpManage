@@ -1,14 +1,17 @@
 package com.example.building_service.model;
 
-import com.example.building_service.enums.BuildingNameType;
-import lombok.*;
+import com.example.building_service.enums.BuildingStatus;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("buildings")
 @Getter
 @Setter
 @ToString
+@Table("buildings")
 public class BuildingEntity {
 
     @Id
@@ -17,10 +20,14 @@ public class BuildingEntity {
 
     private String buildingName;
 
-    private int capacity;
+    private BuildingStatus buildingStatus;
 
-    public BuildingEntity(String buildingName, int capacity) {
+    private int capacity, availableCapacity;
+
+    public BuildingEntity(String buildingName, BuildingStatus buildingStatus, int capacity) {
         this.buildingName = buildingName;
+        this.buildingStatus = buildingStatus;
         this.capacity = capacity;
+        this.availableCapacity = capacity;
     }
 }
