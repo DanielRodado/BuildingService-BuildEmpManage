@@ -10,6 +10,8 @@ public interface BuildingService {
 
     Mono<BuildingEntity> getBuildingById(Long buildingId);
 
+    Flux<BuildingEntity> getAllBuildingsByCapacityBetween(int minCapacity, int maxCapacity);
+
     Flux<BuildingEntity> getAllBuildings();
 
     // Methods Controller

@@ -25,6 +25,11 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
+    public Flux<BuildingEntity> getAllBuildingsByCapacityBetween(int minCapacity, int maxCapacity) {
+        return buildingRepository.findByCapacityBetween(minCapacity, maxCapacity);
+    }
+
+    @Override
     public Flux<BuildingEntity> getAllBuildings() {
         return buildingRepository.findAll();
     }
