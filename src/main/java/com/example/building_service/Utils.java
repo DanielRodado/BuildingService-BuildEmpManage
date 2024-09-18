@@ -1,15 +1,9 @@
 package com.example.building_service;
 
-import com.example.building_service.enums.BuildingNameType;
-import com.example.building_service.enums.BuildingStatus;
-import com.example.building_service.model.BuildingEntity;
 import com.example.building_service.repository.BuildingRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import reactor.core.publisher.Mono;
-
-import static com.example.building_service.utils.BuildingUtil.toBuildingName;
 
 @Configuration
 public class Utils {
@@ -17,7 +11,7 @@ public class Utils {
     @Bean
     public CommandLineRunner initData(BuildingRepository buildingRepository) {
         return args -> {
-            BuildingEntity building1A = new BuildingEntity(toBuildingName("1A"), BuildingStatus.ACTIVE, 5);
+            /*BuildingEntity building1A = new BuildingEntity(toBuildingName("1A"), BuildingStatus.ACTIVE, 5);
             buildingRepository.save(building1A).subscribe();
 
             BuildingEntity building2B = new BuildingEntity(toBuildingName("2B"), BuildingStatus.ACTIVE, 20);
@@ -30,7 +24,7 @@ public class Utils {
             buildingRepository.save(building4D).subscribe();
 
             BuildingEntity building5E = new BuildingEntity(toBuildingName("5E"), BuildingStatus.UNDER_CONSTRUCTION, 100);
-            buildingRepository.save(building5E).subscribe();
+            buildingRepository.save(building5E).subscribe();*/
         };
     }
 
