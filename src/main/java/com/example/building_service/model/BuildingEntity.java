@@ -1,17 +1,14 @@
 package com.example.building_service.model;
 
 import com.example.building_service.enums.BuildingStatus;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
 @Table("buildings")
 public class BuildingEntity {
 
