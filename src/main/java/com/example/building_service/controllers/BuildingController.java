@@ -32,17 +32,17 @@ public class BuildingController {
         return buildingService.getAllBuildingsByCapacityBetween(minCapacity, maxCapacity);
     }
 
-    @PatchMapping("/{buildingName}/assign")
+    @PatchMapping("/{buildingName}/employee/assign")
     public Mono<ResponseEntity<String>> assignEmployeeToBuilding(@PathVariable String buildingName) {
         return buildingService
                 .assignEmployeeToBuilding(buildingName)
                 .then(Mono.just(ResponseEntity.ok().build()));
     }
 
-    @PatchMapping("/{buildingName}/remove")
+    @PatchMapping("/{buildingName}/employee/remove")
     public Mono<ResponseEntity<String>> removeEmployeeFromBuilding(@PathVariable String buildingName) {
         return buildingService
-                .removeEmployeeFromBuilding(buildingName)
+                .removeEmployeeFromBuilding(buildingName.toUpperCase())
                 .then(Mono.just(ResponseEntity.ok().build()));
     }
 
