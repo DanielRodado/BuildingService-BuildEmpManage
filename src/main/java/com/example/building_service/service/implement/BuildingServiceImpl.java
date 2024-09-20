@@ -25,6 +25,13 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
+    public Mono<BuildingEntity> getBuildingByBuildingName(String buildingName) {
+        return buildingRepository
+                .findByBuildingName(buildingName)
+                .switchIfEmpty(Mono.error(new BuildingNotFoundException("The building with name \"" + buildingName + "\" was not found.")));
+    }
+
+    @Override
     public Flux<BuildingEntity> getAllBuildingsByCapacityBetween(int minCapacity, int maxCapacity) {
         return buildingRepository.findByCapacityBetween(minCapacity, maxCapacity);
     }
@@ -32,5 +39,41 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Flux<BuildingEntity> getAllBuildings() {
         return buildingRepository.findAll();
+    }
+
+    @Override
+    public Mono<BuildingEntity> saveBuilding(BuildingEntity building) {
+        return buildingRepository.save(building);
+    }
+
+    // Methods Controller
+
+    // Set Available Capacity from Building Where Assign or Remove Employee To Building
+    @Override
+    public Mono<Void> assignEmployeeToBuilding(String buildingName) {
+        return getBuildingByBuildingName(buildingName)
+                .flatMap(this::increaseAvailableCapacity)
+                .flatMap(this::saveBuilding)
+                .then();
+    }
+
+    @Override
+    public Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building) {
+        building.setAvailableCapacity(building.getAvailableCapacity()-1);
+        return Mono.just(building);
+    }
+
+    @Override
+    public Mono<Void> removeEmployeeFromBuilding(String buildingName) {
+        return getBuildingByBuildingName(buildingName)
+                .flatMap(this::decreaseAvailableCapacity)
+                .flatMap(this::saveBuilding)
+                .then();
+    }
+
+    @Override
+    public Mono<BuildingEntity> decreaseAvailableCapacity(BuildingEntity building) {
+        building.setAvailableCapacity(building.getAvailableCapacity()+1);
+        return Mono.just(building);
     }
 }
