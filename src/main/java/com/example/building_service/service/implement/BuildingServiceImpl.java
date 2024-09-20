@@ -52,20 +52,6 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Mono<Void> assignEmployeeToBuilding(String buildingName) {
         return getBuildingByBuildingName(buildingName)
-                .flatMap(this::increaseAvailableCapacity)
-                .flatMap(this::saveBuilding)
-                .then();
-    }
-
-    @Override
-    public Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building) {
-        building.setAvailableCapacity(building.getAvailableCapacity()-1);
-        return Mono.just(building);
-    }
-
-    @Override
-    public Mono<Void> removeEmployeeFromBuilding(String buildingName) {
-        return getBuildingByBuildingName(buildingName)
                 .flatMap(this::decreaseAvailableCapacity)
                 .flatMap(this::saveBuilding)
                 .then();
@@ -73,6 +59,20 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public Mono<BuildingEntity> decreaseAvailableCapacity(BuildingEntity building) {
+        building.setAvailableCapacity(building.getAvailableCapacity()-1);
+        return Mono.just(building);
+    }
+
+    @Override
+    public Mono<Void> removeEmployeeFromBuilding(String buildingName) {
+        return getBuildingByBuildingName(buildingName)
+                .flatMap(this::increaseAvailableCapacity)
+                .flatMap(this::saveBuilding)
+                .then();
+    }
+
+    @Override
+    public Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building) {
         building.setAvailableCapacity(building.getAvailableCapacity()+1);
         return Mono.just(building);
     }

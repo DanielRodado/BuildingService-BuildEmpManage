@@ -23,10 +23,10 @@ public interface BuildingService {
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
     Mono<Void> assignEmployeeToBuilding(String buildingName);
 
-    Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building);
+    Mono<BuildingEntity> decreaseAvailableCapacity(BuildingEntity building);
 
     Mono<Void> removeEmployeeFromBuilding(String buildingName);
 
-    Mono<BuildingEntity> decreaseAvailableCapacity(BuildingEntity building);
+    Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building);
 
 }
