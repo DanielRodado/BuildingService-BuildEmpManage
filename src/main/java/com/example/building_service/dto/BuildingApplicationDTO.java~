@@ -1,0 +1,4 @@
+package com.example.building_service.dto;
+
+public record BuildingApplicationDTO(String buildingName, String status, int capacity) {
+}
