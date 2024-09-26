@@ -57,4 +57,11 @@ public class BuildingController {
                 .then(Mono.just(ResponseEntity.ok().build()));
     }
 
+    @DeleteMapping("/{buildingName}")
+    public Mono<ResponseEntity<String>> deleteBuilding(@PathVariable String buildingName) {
+        return buildingService
+                .deleteBuilding(buildingName.toUpperCase())
+                .then(Mono.just(ResponseEntity.noContent().build()));
+    }
+
 }

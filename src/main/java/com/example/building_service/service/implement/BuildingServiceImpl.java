@@ -90,6 +90,11 @@ public class BuildingServiceImpl implements BuildingService {
                 .then();
     }
 
+    @Override
+    public Mono<Void> deleteBuilding(String buildingName) {
+        return getBuildingByBuildingName(buildingName).flatMap(buildingRepository::delete);
+    }
+
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
     @Override
     public Mono<Void> assignEmployeeToBuilding(String buildingName) {
