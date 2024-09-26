@@ -1,5 +1,6 @@
 package com.example.building_service.service;
 
+import com.example.building_service.dto.BuildingApplicationDTO;
 import com.example.building_service.model.BuildingEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,9 +17,19 @@ public interface BuildingService {
 
     Flux<BuildingEntity> getAllBuildings();
 
+    Mono<Boolean> existsBuildingByBuildingName(String buildingName);
+
     Mono<BuildingEntity> saveBuilding(BuildingEntity building);
 
+    // Validations
+
+    Mono<BuildingApplicationDTO> validateBuildingApp(BuildingApplicationDTO buildingApp);
+
+    Mono<BuildingApplicationDTO> validateExistsBuildingName(String buildingName, BuildingApplicationDTO buildingApp);
+
     // Methods Controller
+
+    Mono<Void> createBuilding(Mono<BuildingApplicationDTO> buildingAppMono);
 
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
     Mono<Void> assignEmployeeToBuilding(String buildingName);

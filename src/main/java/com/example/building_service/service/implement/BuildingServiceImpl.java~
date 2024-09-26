@@ -84,7 +84,7 @@ public class BuildingServiceImpl implements BuildingService {
     public Mono<Void> createBuilding(Mono<BuildingApplicationDTO> buildingAppMono) {
         return buildingAppMono
                 .flatMap(this::validateBuildingApp)
-                .flatMap(buildingApp -> validateExistsBuildingName(buildingApp.name(), buildingApp))
+                .flatMap(buildingApp -> validateExistsBuildingName(buildingApp.buildingName(), buildingApp))
                 .map(BuildingMapper::toBuildingEntity)
                 .flatMap(this::saveBuilding)
                 .then();
