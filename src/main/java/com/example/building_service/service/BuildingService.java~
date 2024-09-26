@@ -31,6 +31,8 @@ public interface BuildingService {
 
     Mono<Void> createBuilding(Mono<BuildingApplicationDTO> buildingAppMono);
 
+    Mono<Void> deleteBuilding(String buildingName);
+
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
     Mono<Void> assignEmployeeToBuilding(String buildingName);
 

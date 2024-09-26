@@ -36,6 +36,11 @@ public class BuildingController {
         return buildingService.getAllBuildingsByCapacityBetween(minCapacity, maxCapacity);
     }
 
+    @GetMapping("/exists/{buildingName}")
+    public Mono<ResponseEntity<String>> existsBuildingByBuildingName(@PathVariable String buildingName) {
+        return buildingService.requestExistsBuilding(buildingName.toUpperCase()).thenReturn(ResponseEntity.ok().build());
+    }
+
     @PostMapping
     private Mono<ResponseEntity<String>> createBuilding(@RequestBody Mono<BuildingApplicationDTO> buildingApplMono) {
         return buildingService

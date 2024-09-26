@@ -95,14 +95,6 @@ public class BuildingServiceImpl implements BuildingService {
         return getBuildingByBuildingName(buildingName).flatMap(buildingRepository::delete);
     }
 
-    @Override
-    public Mono<Void> requestExistsBuilding(String buildingName) {
-        return existsBuildingByBuildingName(buildingName)
-                .filter(exists -> exists)
-                .switchIfEmpty(Mono.error(new BuildingNotFoundException(BUILDING_NOT_FOUND)))
-                .then();
-    }
-
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
     @Override
     public Mono<Void> assignEmployeeToBuilding(String buildingName) {
