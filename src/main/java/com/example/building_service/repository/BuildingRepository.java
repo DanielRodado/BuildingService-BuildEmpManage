@@ -7,6 +7,8 @@ import reactor.core.publisher.Mono;
 
 public interface BuildingRepository extends ReactiveCrudRepository<BuildingEntity, Long> {
 
+    Mono<Boolean> existsByBuildingName(String buildingName);
+
     Mono<BuildingEntity> findByBuildingName(String buildingName);
 
     Flux<BuildingEntity> findByCapacityBetween(int minCapacity, int maxCapacity);
