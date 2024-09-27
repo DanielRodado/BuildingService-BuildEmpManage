@@ -27,6 +27,8 @@ public interface BuildingService {
 
     Mono<BuildingApplicationDTO> validateExistsBuildingName(String buildingName, BuildingApplicationDTO buildingApp);
 
+    Mono<Void> validateStatus(String status);
+
     // Methods Controller
 
     Mono<Void> createBuilding(Mono<BuildingApplicationDTO> buildingAppMono);
@@ -34,6 +36,10 @@ public interface BuildingService {
     Mono<Void> deleteBuilding(String buildingName);
 
     Mono<Void> requestExistsBuilding(String buildingName);
+
+    Mono<Void> changeStatusOfBuilding(String buildingName, String status);
+
+    Mono<BuildingEntity> changeStatus(BuildingEntity building, String status);
 
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
     Mono<Void> assignEmployeeToBuilding(String buildingName);

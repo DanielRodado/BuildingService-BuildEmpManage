@@ -1,8 +1,10 @@
 package com.example.building_service.service.implement;
 
 import com.example.building_service.dto.BuildingApplicationDTO;
+import com.example.building_service.enums.BuildingStatus;
 import com.example.building_service.exceptions.BuildingNameAlreadyExistsException;
 import com.example.building_service.exceptions.BuildingNotFoundException;
+import com.example.building_service.exceptions.ValidationException;
 import com.example.building_service.mapper.BuildingMapper;
 import com.example.building_service.model.BuildingEntity;
 import com.example.building_service.repository.BuildingRepository;
@@ -13,8 +15,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static com.example.building_service.utils.Messages.BUILDING_EXISTS;
-import static com.example.building_service.utils.Messages.BUILDING_NOT_FOUND;
+import static com.example.building_service.utils.Messages.*;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
@@ -78,6 +79,16 @@ public class BuildingServiceImpl implements BuildingService {
                 .thenReturn(buildingApp);
     }
 
+    @Override
+    public Mono<BuildingEntity> validateStatus(BuildingEntity building, String status) {
+        try {
+            BuildingStatus.valueOf(status);
+            return Mono.just(building);
+        } catch (IllegalArgumentException e) {
+            return Mono.error(new ValidationException(STATUS_INVALID));
+        }
+    }
+
     // Methods Controller
 
     @Override
@@ -93,6 +104,28 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Mono<Void> deleteBuilding(String buildingName) {
         return getBuildingByBuildingName(buildingName).flatMap(buildingRepository::delete);
+    }
+
+    @Override
+    public Mono<Void> requestExistsBuilding(String buildingName) {
+        return existsBuildingByBuildingName(buildingName)
+                .filter(exists -> exists)
+                .switchIfEmpty(Mono.error(new BuildingNotFoundException(BUILDING_NOT_FOUND)))
+                .then();
+    }
+
+    @Override
+    public Mono<Void> changeStatusOfBuilding(String buildingName, BuildingStatus status) {
+        return getBuildingByBuildingName(buildingName)
+                .flatMap(building -> changeStatus(building, status))
+                .flatMap(this::saveBuilding)
+                .then();
+    }
+
+    @Override
+    public Mono<BuildingEntity> changeStatus(BuildingEntity building, String status) {
+        building.setBuildingStatus(BuildingStatus.valueOf(status));
+        return Mono.just(building);
     }
 
     // Set Available Capacity from Building Where Assign or Remove Employee To Building
