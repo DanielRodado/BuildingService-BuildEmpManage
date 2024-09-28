@@ -29,6 +29,11 @@ public class GlobalExceptionHandler {
         return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage()));
     }
 
+    @ExceptionHandler(InvalidBuildingCapacityException.class)
+    public Mono<ResponseEntity<String>> handleInvalidBuildingCapacityException(InvalidBuildingCapacityException ex) {
+        return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage()));
+    }
+
     @ExceptionHandler(BuildingNotFoundException.class)
     public Mono<ResponseEntity<String>> handleBuildingNotFoundException(BuildingNotFoundException ex) {
         return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage()));
