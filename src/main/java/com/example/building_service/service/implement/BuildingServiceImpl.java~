@@ -4,6 +4,7 @@ import com.example.building_service.dto.BuildingApplicationDTO;
 import com.example.building_service.enums.BuildingStatus;
 import com.example.building_service.exceptions.BuildingNameAlreadyExistsException;
 import com.example.building_service.exceptions.BuildingNotFoundException;
+import com.example.building_service.exceptions.InvalidBuildingCapacityException;
 import com.example.building_service.exceptions.ValidationException;
 import com.example.building_service.mapper.BuildingMapper;
 import com.example.building_service.model.BuildingEntity;
@@ -62,33 +63,6 @@ public class BuildingServiceImpl implements BuildingService {
         return buildingRepository.save(building);
     }
 
-    // Validations
-
-    @SuppressWarnings("DataFlowIssue")
-    @Override
-    public Mono<BuildingApplicationDTO> validateBuildingApp(BuildingApplicationDTO buildingApp) {
-        buildingAppValidator.validate(buildingApp, null);
-        return Mono.just(buildingApp);
-    }
-
-    @Override
-    public Mono<BuildingApplicationDTO> validateExistsBuildingName(String buildingName, BuildingApplicationDTO buildingApp) {
-        return existsBuildingByBuildingName(buildingName)
-                .filter(exists -> !exists)
-                .switchIfEmpty(Mono.error(new BuildingNameAlreadyExistsException(BUILDING_EXISTS)))
-                .thenReturn(buildingApp);
-    }
-
-    @Override
-    public Mono<BuildingEntity> validateStatus(BuildingEntity building, String status) {
-        try {
-            BuildingStatus.valueOf(status);
-            return Mono.just(building);
-        } catch (IllegalArgumentException e) {
-            return Mono.error(new ValidationException(STATUS_INVALID));
-        }
-    }
-
     // Methods Controller
 
     @Override
@@ -115,8 +89,9 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Mono<Void> changeStatusOfBuilding(String buildingName, BuildingStatus status) {
-        return getBuildingByBuildingName(buildingName)
+    public Mono<Void> changeStatusOfBuilding(String buildingName, String status) {
+        return validateStatus(status)
+                .then(getBuildingByBuildingName(buildingName))
                 .flatMap(building -> changeStatus(building, status))
                 .flatMap(this::saveBuilding)
                 .then();
@@ -125,6 +100,22 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Mono<BuildingEntity> changeStatus(BuildingEntity building, String status) {
         building.setBuildingStatus(BuildingStatus.valueOf(status));
+        return Mono.just(building);
+    }
+
+    @Override
+    public Mono<Void> changeCapacityOfBuilding(String buildingName, int capacity) {
+        return getBuildingByBuildingName(buildingName)
+                .flatMap(building -> validateCapacity(building, capacity))
+                .flatMap(building -> changeCapacity(building, capacity))
+                .flatMap(this::saveBuilding)
+                .then();
+    }
+
+    @Override
+    public Mono<BuildingEntity> changeCapacity(BuildingEntity building, int capacity) {
+        building.setAvailableCapacity(capacity - (building.getCapacity() - building.getAvailableCapacity()));
+        building.setCapacity(capacity);
         return Mono.just(building);
     }
 
@@ -155,5 +146,39 @@ public class BuildingServiceImpl implements BuildingService {
     public Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building) {
         building.setAvailableCapacity(building.getAvailableCapacity()+1);
         return Mono.just(building);
+    }
+
+    // Validations
+
+    @SuppressWarnings("DataFlowIssue")
+    @Override
+    public Mono<BuildingApplicationDTO> validateBuildingApp(BuildingApplicationDTO buildingApp) {
+        buildingAppValidator.validate(buildingApp, null);
+        return Mono.just(buildingApp);
+    }
+
+    @Override
+    public Mono<BuildingApplicationDTO> validateExistsBuildingName(String buildingName, BuildingApplicationDTO buildingApp) {
+        return existsBuildingByBuildingName(buildingName)
+                .filter(exists -> !exists)
+                .switchIfEmpty(Mono.error(new BuildingNameAlreadyExistsException(BUILDING_EXISTS)))
+                .thenReturn(buildingApp);
+    }
+
+    @Override
+    public Mono<Void> validateStatus(String status) {
+        try {
+            BuildingStatus.valueOf(status);
+            return Mono.empty();
+        } catch (IllegalArgumentException e) {
+            return Mono.error(new ValidationException(STATUS_INVALID));
+        }
+    }
+
+    @Override
+    public Mono<BuildingEntity> validateCapacity(BuildingEntity building, int capacity) {
+        return building.getNumberOfEmployees() > capacity
+                ? Mono.error(new InvalidBuildingCapacityException(CAPACITY_INVALID + building.getNumberOfEmployees()))
+                : Mono.just(building);
     }
 }

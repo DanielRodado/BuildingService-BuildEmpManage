@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
+import static com.example.building_service.utils.Messages.CAPACITY_CHANGED;
 import static com.example.building_service.utils.Messages.STATUS_CHANGED;
 
 @RestController
@@ -51,11 +52,17 @@ public class BuildingController {
     }
 
     @PatchMapping("/{buildingName}/status")
-    @Transactional
     public Mono<ResponseEntity<String>> changeStatusOfBuilding(@PathVariable String buildingName, @RequestParam String status) {
         return buildingService
                 .changeStatusOfBuilding(buildingName.toUpperCase(), status)
                 .thenReturn(ResponseEntity.ok(STATUS_CHANGED));
+    }
+
+    @PatchMapping("/{buildingName}/capacity")
+    public Mono<ResponseEntity<String>> changeCapacityOfBuilding(@PathVariable String buildingName, @RequestParam int capacity) {
+        return buildingService
+                .changeCapacityOfBuilding(buildingName.toUpperCase(), capacity)
+                .thenReturn(ResponseEntity.ok(CAPACITY_CHANGED));
     }
 
     @PatchMapping("/{buildingName}/employee/assign")
