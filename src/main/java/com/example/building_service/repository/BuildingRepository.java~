@@ -13,6 +13,4 @@ public interface BuildingRepository extends ReactiveCrudRepository<BuildingEntit
 
     Flux<BuildingEntity> findByCapacityBetween(int minCapacity, int maxCapacity);
 
-    Flux<BuildingEntity> findByAvailableCapacityGreaterThan(int availableCapacity);
-
 }
