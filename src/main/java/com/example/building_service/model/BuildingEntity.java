@@ -29,4 +29,8 @@ public class BuildingEntity {
         this.capacity = capacity;
         this.availableCapacity = capacity;
     }
+
+    public int getNumberOfEmployees() {
+        return capacity - availableCapacity;
+    }
 }
