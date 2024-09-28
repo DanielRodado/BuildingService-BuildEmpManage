@@ -19,8 +19,6 @@ public interface BuildingService {
 
     Flux<BuildingEntity> getAllBuildings();
 
-    Mono<Boolean> existsBuildingByBuildingName(String buildingName);
-
     Mono<BuildingEntity> saveBuilding(BuildingEntity building);
 
     // Methods Controller
@@ -47,15 +45,5 @@ public interface BuildingService {
     Mono<Void> removeEmployeeFromBuilding(String buildingName);
 
     Mono<BuildingEntity> increaseAvailableCapacity(BuildingEntity building);
-
-    // Validations
-
-    Mono<BuildingApplicationDTO> validateBuildingApp(BuildingApplicationDTO buildingApp);
-
-    Mono<BuildingApplicationDTO> validateExistsBuildingName(String buildingName, BuildingApplicationDTO buildingApp);
-
-    Mono<Void> validateStatus(String status);
-
-    Mono<Void> validateCapacity(BuildingEntity building, int capacity);
 
 }

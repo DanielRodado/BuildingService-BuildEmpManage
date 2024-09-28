@@ -13,7 +13,9 @@ public interface BuildingService {
 
     Mono<BuildingEntity> getBuildingByBuildingName(String buildingName);
 
-    Flux<BuildingEntity> getAllBuildingsByCapacityBetween(int minCapacity, int maxCapacity);
+    Flux<BuildingEntity> getAllBuildingsWithCapacityBetween(int minCapacity, int maxCapacity);
+
+    Flux<BuildingEntity> getAllBuildingsWithCapacityAvailable();
 
     Flux<BuildingEntity> getAllBuildings();
 
