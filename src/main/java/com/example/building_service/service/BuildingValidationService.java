@@ -22,4 +22,6 @@ public interface BuildingValidationService {
 
     Mono<Void> validateBuildingCapacity(BuildingEntity building, int capacity);
 
+    Mono<Void> validateAvailableCapacityBeforeAssigning(BuildingEntity building);
+
 }

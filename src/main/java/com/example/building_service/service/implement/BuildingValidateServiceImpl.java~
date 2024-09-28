@@ -64,7 +64,7 @@ public class BuildingValidateServiceImpl implements BuildingValidationService {
     public Mono<Void> validateAvailableCapacityBeforeAssigning(BuildingEntity building) {
         return building.getAvailableCapacity() > 0
                 ? Mono.empty()
-                : Mono.error(new BuildingCapacityExceededException(CAPACITY_EXCEEDED));
+                : Mono.error(new BuildingCapacityExceededException(""));
     }
 
 }

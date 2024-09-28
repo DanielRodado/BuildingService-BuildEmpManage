@@ -123,6 +123,9 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Mono<Void> assignEmployeeToBuilding(String buildingName) {
         return getBuildingByBuildingName(buildingName)
+                .flatMap(building -> validationService
+                        .validateAvailableCapacityBeforeAssigning(building)
+                        .thenReturn(building))
                 .flatMap(this::decreaseAvailableCapacity)
                 .flatMap(this::saveBuilding)
                 .then();
