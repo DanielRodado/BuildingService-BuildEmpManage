@@ -11,10 +11,12 @@ import com.example.building_service.repository.BuildingRepository;
 import com.example.building_service.service.BuildingValidationService;
 import com.example.building_service.validations.BuildingAppValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import static com.example.building_service.utils.Messages.*;
 
+@Service
 public class BuildingValidateServiceImpl implements BuildingValidationService {
 
     @Autowired
